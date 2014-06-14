@@ -23,19 +23,31 @@ def read_urls(sourceCode, outFile):
 	fOut.close()
 
 
+def openAnything(source):
+# make sure we can read from file or url
+	try:
+		u = urllib2.urlopen(source)
+		return u.read()
+
+	except (ValueError, IOError, OSError):
+		f = open(source, 'rU')
+		content = f.read()
+		f.close()
+
+		return content 
+		
+
 
 def main():
-	args = sys.argv[1:]
+	args = sys.argv[1:]	# list of input arguments
 
 	if not args:
-		print 'usage: input_file output_file'
+		print 'usage: [input_file/url] output_file'
 		sys.exit(1)
 
-	f = open(args[0], 'rU')
-	sourceCode = f.read() 
+	sourceCode = openAnything(args[0])
 
 	read_urls(sourceCode, args[1])
-	f.close()
 
 	
 
